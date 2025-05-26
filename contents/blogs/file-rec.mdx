@@ -1,167 +1,309 @@
 ---
-title: "Building a Recursive File System with React: A Deep Dive"
-description: "Explore how to create a recursive file system in React. This blog post provides a comprehensive guide on building a file system where folders and files can be nested, added, renamed, and deleted."
-date: 02-09-2024
+title: "Tomodachi Pets: Building an AI-Powered On-Chain Pet Simulator on Sui"
+description: "Go behind the scenes of Tomodachi Pets — a hackathon-winning AI pet game using Sui Move, Walrus storage, and OpenAI image generation. Learn about composable NFTs, browser extension magic, and truly decentralized digital companions."
+date: 2025-05-27
 authors:
-  - avatar: "https://ui.shadcn.com/avatars/02.png"
-    handle: nisabmohd
-    username: Nisab Mohd
-    handleUrl: "https://github.com/nisabmohd"
-cover: "https://img.freepik.com/premium-vector/many-monsters-various-colors-doodle-come-bless-birthday-happy_577083-84.jpg?w=826"
+  - avatar: "https://pbs.twimg.com/profile_images/1750574047819143168/hMQTOrQu_400x400.jpg"
+    handle: sumionochi
+    username: Aaditya Srivastava
+    handleUrl: "https://github.com/sumionochi"
+cover: "https://pbs.twimg.com/media/Gr4OyloXgAAeKtr?format=jpg&name=medium"
 ---
 
-## Introduction: Crafting a Recursive File System in React
+# Tomodachi Pets: How We Built an AI-Powered On-Chain Virtual Pet Simulator on Sui
 
-In modern web development, creating interactive and dynamic file systems is a common requirement. Whether for managing documents, organizing projects, or building complex data structures, having a robust file system is crucial. In this blog post, we’ll explore how to build a recursive file system in React, focusing on nested folders and files that can be added, renamed, or deleted.
+**Tomodachi Pets** isn’t your ordinary NFT app. It’s a **full-stack, on-chain, AI-driven virtual pet playground**—where anyone can create, personalize, and show off digital companions that live not only in a wallet, but also right on your browser, following your cursor across the web.  
+This post will walk you through the project’s goals, the tech under the hood, how we used Sui + Move, Walrus, and OpenAI, and why this is the *next evolution* in Web3 games.
 
-Check out the project on [GitHub](https://github.com/nisabmohd/recursive-file-system-react) for a complete implementation.
+---
 
-## Project Overview
+## 🚩 Project Links
 
-The Recursive File System project is designed to simulate a file management system where users can interact with folders and files dynamically. It supports the following features:
+- **Main App:** [github.com/sumionochi/tomodachi-digital-pet](https://github.com/sumionochi/tomodachi-digital-pet)
+- **Browser Extension:** [github.com/sumionochi/tomodachi-digital-pet-extension](https://github.com/sumionochi/tomodachi-digital-pet-extension)
+- **Documentation:** [github.com/sumionochi/tomodachi-pets-documentation](https://github.com/sumionochi/tomodachi-pets-documentation)
+- **Demo Video:** [YouTube Demo](https://www.youtube.com/watch?v=E1rkjZkNquI)
 
-- **Adding New Folders and Files**: Create new folders and files within any existing folder.
-- **Renaming Items**: Change the name of folders and files.
-- **Deleting Items**: Remove folders and files from the file system.
-- **Nested Structure**: Handle nested folders and files to create a hierarchical view.
+---
 
-## Key Features and Implementation
+## What is Tomodachi Pets?
 
-### 1. Recursive Data Structure
+- **Create your own pet NFT**: Draw, prompt, or upload an image—AI (OpenAI’s GPT-Image-1) turns it into a unique pet or accessory.
+- **Mint & personalize on-chain**: Each pet and accessory is a composable NFT on Sui. You can equip/unequip hats, swords, etc. to your pet using Move dynamic fields.
+- **Earn points, play daily**: Answer fun quizzes to check in and earn points you spend to mint new items.
+- **See your pet everywhere**: A Chrome extension brings your pet out of the dApp—following your mouse on any website!
+- **True digital ownership**: Everything is stored in your wallet and decentralized storage (Walrus)—not on a company server.
 
-The core of the project is a recursive data structure that represents the file system. Each folder can contain other folders or files, and each file or folder has properties such as `id`, `name`, and `children` (for folders).
+---
 
-Here’s a basic structure for a folder:
+## ✨ Key Features
 
-```jsx:data.js
-const folder = {
-  id: "1",
-  name: "Documents",
-  type: "folder",
-  children: [
-    { id: "2", name: "Resume.pdf", type: "file" },
-    { id: "3", name: "CoverLetter.docx", type: "file" },
-  ],
-};
-```
+| Feature                       | Description                                                      |
+|-------------------------------|------------------------------------------------------------------|
+| 🎨 AI-Generated Art           | Draw or prompt pet/accessory images, AI creates transparent PNGs |
+| 🧬 Composable NFT Pets        | Equip/unequip NFT assets to your Pet using Sui dynamic fields    |
+| 🔗 100% On-Chain Logic        | All game rules enforced via Move smart contract                  |
+| 💾 Walrus Decentralized Storage | All images uploaded and referenced on-chain, censorship-resistant |
+| 🏆 Daily Quiz & Rewards       | Quiz + check-in system teaches and rewards users with points     |
+| 🌐 Browser Extension          | Animated, accessorized pet follows your cursor across websites   |
+| 🎞️ Sprite Sheet Animation    | AI can generate multi-frame sprites; extension animates in real time |
+| 🛡️ True Ownership            | All assets, pets, points—fully owned, on-chain, tradable         |
 
-### 2. Components
+---
 
-The project includes several key components to handle different aspects of the file system:
+## 🏗️ Under the Hood: Project Structure
 
-- **FileExplorer**: Displays the entire file system and handles rendering folders and files.
+The project is split into two main parts:
 
-```jsx:file-explorer.jsx
-import React, { useState } from "react";
-import Folder from "./Folder";
-import File from "./File";
+#### 1. Main Web App: [`tomodachi-digital-pet`](https://github.com/sumionochi/tomodachi-digital-pet)
 
-const FileExplorer = () => {
-  const [files, setFiles] = useState(initialData); // initialData is your recursive data structure
+- **Move Contract (`move/sources/game.move`)**: Handles minting, equipping, point rewards, and composability.
+- **Next.js Frontend**: Users draw, generate with AI, mint NFTs, do quizzes, and see their pets.
+- **API Backend**: Integrates with OpenAI for image gen and Walrus for decentralized storage.
+- **React hooks** for live data (pets, assets, scoreboard).
+- **All game logic enforced on-chain.**
 
-  const addItem = (parentId, type) => {
-    // Logic to add a folder or file
-  };
+#### 2. Browser Extension: [`tomodachi-digital-pet-extension`](https://github.com/sumionochi/tomodachi-digital-pet-extension)
 
-  const renameItem = (id, newName) => {
-    // Logic to rename a folder or file
-  };
+- **Popup UI**: Enter wallet address, choose pet, manage assets.
+- **Background Script**: Fetches live data from local Sui RPC API.
+- **Content Script**: Renders your animated pet and its gear as a floating overlay—following your cursor on every site.
 
-  const deleteItem = (id) => {
-    // Logic to delete a folder or file
-  };
+---
 
-  return (
-    <div>
-      {files.map((file) =>
-        file.type === "folder" ? (
-          <Folder
-            key={file.id}
-            folder={file}
-            onAdd={addItem}
-            onRename={renameItem}
-            onDelete={deleteItem}
-          />
-        ) : (
-          <File
-            key={file.id}
-            file={file}
-            onRename={renameItem}
-            onDelete={deleteItem}
-          />
-        )
-      )}
-    </div>
-  );
-};
+## 🧑‍💻 Technical Deep Dive
 
-export default FileExplorer;
-```
+### Smart Contracts (Move)
 
-- **Folder**: Renders folders and handles nested items.
+- **Composable NFTs**: Pets are containers; you equip asset NFTs (hats, wings) to them.  
+- **Daily Rewards & Quizzes**: On-chain clock enforces one check-in per day; quizzes are required for rewards.
+- **Unique Names, Admin Tools**: Pet names are enforced globally; admin (for testing) can set scores.
+- **Events & Ownership**: All actions (mint, equip, unequip) emit events, making it indexable and interactive.
 
-```jsx:folder.jsx
-import React from "react";
-import FileExplorer from "./FileExplorer";
+### AI & Image Pipeline
 
-const Folder = ({ folder, onAdd, onRename, onDelete }) => {
-  return (
-    <div>
-      <h3>{folder.name}</h3>
-      <button onClick={() => onAdd(folder.id, "folder")}>Add Folder</button>
-      <button onClick={() => onAdd(folder.id, "file")}>Add File</button>
-      <button onClick={() => onRename(folder.id, "New Name")}>Rename</button>
-      <button onClick={() => onDelete(folder.id)}>Delete</button>
-      {folder.children && <FileExplorer files={folder.children} />}
-    </div>
-  );
-};
+- **Text-to-Image & Sketch-to-Image**:  
+  - Type “wizard hat” → AI generates a PNG.
+  - Draw a rough sketch, give a prompt → AI refines it.
+- **Walrus Storage**:  
+  - All images uploaded to Walrus.
+  - Blob IDs and URLs saved in NFT metadata on Sui.
+  - No centralized server dependency.
 
-export default Folder;
-```
+### Browser Extension UX
 
-- **File**: Renders individual files with options to rename and delete.
+- **Pet Companion on Every Site**:  
+  - Extension fetches your pet + accessories, animates on every page.
+  - Accessory spritesheets = walking, eating, or special moves.
+  - User can toggle visibility, switch gear live.
 
-```jsx:file.jsx
-import React from "react";
+---
 
-const File = ({ file, onRename, onDelete }) => {
-  return (
-    <div>
-      <p>{file.name}</p>
-      <button onClick={() => onRename(file.id, "New Name")}>Rename</button>
-      <button onClick={() => onDelete(file.id)}>Delete</button>
-    </div>
-  );
-};
+## 🕹️ Tomodachi Pets Gameflow: Step-by-Step Experience
 
-export default File;
-```
+Ever wondered what it feels like to *truly own and personalize a digital pet*—and watch it playfully follow you across the web?  
+**Tomodachi Pets** turns that into reality! Let’s walk through the full user journey and gameflow, with illustrations at every stage.
 
-### 3. Handling State and Actions
+---
 
-State management is handled using React hooks like `useState` to manage the file system data. Actions such as adding, renaming, and deleting items update the state accordingly.
+### 1️⃣ Register & Connect Your Wallet
 
-```jsx
-const [files, setFiles] = useState(initialData);
+Before you can meet your new companion, you need to sign up:
 
-const addItem = (parentId, type) => {
-  // Logic to add a new item to the file system
-};
+- Open the [Tomodachi Pets web app](https://github.com/sumionochi/tomodachi-digital-pet).
+- Connect your Sui wallet (Sui Wallet, Ethos, Surf, etc.).
+- Register your account—*instantly receive 10 starting points*!
 
-const renameItem = (id, newName) => {
-  // Logic to rename an existing item
-};
+<figure>
+  <img src="https://i.postimg.cc/90pzXq4V/Screenshot-2025-05-26-at-8-40-18-PM.png" alt="Registration: Receive points" />
+  <figcaption>
+    <b>Figure 1:</b> Register and instantly receive 10 points as your starting score.
+  </figcaption>
+</figure>
 
-const deleteItem = (id) => {
-  // Logic to delete an item
-};
-```
+---
 
-## Conclusion: Building a Dynamic File System with React
+### 2️⃣ Complete the Daily Quiz & Check-In
 
-Creating a recursive file system in React is a powerful way to manage hierarchical data and provide a dynamic user experience. By leveraging React's component-based architecture and state management, you can build interactive file systems that handle complex nested structures efficiently.
+Get rewarded for learning!  
+Each day, answer a fun quiz (about Sui, Web3, or Tomodachi) and check in for bonus points.
 
-Check out the full implementation on [GitHub](https://github.com/nisabmohd/recursive-file-system-react) and explore how these concepts can be applied to your own projects. Happy coding!
+- Answer daily quiz questions (multiple choice, educational, and fun).
+- After completion, **Daily Check-In** unlocks.
+- Claim +2 points with a single click (on-chain logic enforces 24-hour limit).
 
-🚀📁
+<figure>
+  <img src="https://i.postimg.cc/qMV9450k/Screenshot-2025-05-26-at-8-50-03-PM.png" alt="Daily Quiz: Start" />
+  <figcaption>
+    <b>Figure 4:</b> Start your daily quiz—testing your Sui and Tomodachi knowledge for extra rewards.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3QsimWkAAXdsX?format=jpg&name=4096x4096" alt="All correct quiz answers" />
+  <figcaption>
+    <b>Figure 6.1:</b> All correct quiz answers—earn full points and move forward smoothly.
+  </figcaption>
+</figure>
+
+---
+
+### 3️⃣ Create Your Unique Pet (Minting)
+
+Your journey isn’t complete without your *own* pet NFT:
+
+- Choose a unique name (enforced by smart contract).
+- Click “Create Pet” and sign the transaction.
+- Your pet is minted as an NFT—visible in your dashboard *and* in your wallet!
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3T3rlXEAAS3JF?format=jpg&name=4096x4096" alt="Enter Unique Pet Name" />
+  <figcaption>
+    <b>Figure 8:</b> Enter a one-of-a-kind pet name and mint your on-chain companion.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3UJkDXUAA5fqu?format=jpg&name=4096x4096" alt="Pet Minted" />
+  <figcaption>
+    <b>Figure 9:</b> Your pet NFT is now created and shown in your dashboard.
+  </figcaption>
+</figure>
+
+---
+
+### 4️⃣ Design & Generate Accessories with AI
+
+Make your pet truly yours!  
+Design hats, wings, glasses, or anything else—either by:
+
+- Drawing it on a canvas, or
+- Typing a text prompt (“blue wizard hat”, “cyber sword”), or
+- Uploading your own image
+
+Our AI (OpenAI GPT-Image-1) generates original art and sprite sheets from your idea.
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3VBrsW4AAMfD9?format=jpg&name=large" alt="Draw/Prompt Accessory" />
+  <figcaption>
+    <b>Figure 10:</b> Create a custom accessory by drawing or entering a text prompt.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3V_-NXIAA4xad?format=jpg&name=large" alt="AI Generates Accessory" />
+  <figcaption>
+    <b>Figure 11:</b> AI generates multiple variants and animated sprite sheets for you to select or refine.
+  </figcaption>
+</figure>
+
+---
+
+### 5️⃣ Mint Accessories as NFT Assets
+
+Ready to lock in your design?
+
+- Click “Mint Accessory” (burns 10 points per asset).
+- The accessory image is uploaded to **Walrus decentralized storage**.
+- You now own an **Accessory NFT** on Sui—composable and tradeable!
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3ZT_8WcAAN7YN?format=jpg&name=large" alt="Accessory spritesheet generation" />
+  <figcaption>
+    <b>Figure 15:</b> Minted accessory NFTs can be static or animated (spritesheet).
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3ZzK8XwAAjBq_?format=jpg&name=large" alt="All assets, static and animated, generated" />
+  <figcaption>
+    <b>Figure 16:</b> All assets—static and animated—are generated, owned, and ready for your pet.
+  </figcaption>
+</figure>
+
+---
+
+### 6️⃣ Equip Accessories to Your Pet
+
+- Choose your pet and select an accessory.
+- The accessory NFT is dynamically attached to the pet via Move contract.
+- Watch your pet update in real time—mix and match for endless looks!
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3aINHXQAA_T9u?format=jpg&name=large" alt="Select Pet for Equip" />
+  <figcaption>
+    <b>Figure 18:</b> Equip your pet with any combination of assets—each combination is instantly reflected in your dashboard.
+  </figcaption>
+</figure>
+
+---
+
+### 7️⃣ See Your Pet in Action with the Browser Extension
+
+Take your companion *everywhere*:
+
+- Install the [Tomodachi Pets extension](https://github.com/sumionochi/tomodachi-digital-pet-extension)
+- Enter your Sui address and pick your pet.
+- Your pet (with all equipped accessories, animations, and customizations) now follows your cursor on ANY website—fully animated!
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3cPZAXcAAzmV3?format=jpg&name=large" alt="Extension: Pet Follows Cursor" />
+  <figcaption>
+    <b>Figure 20:</b> Pet overlay—always by your side, everywhere you browse!
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://pbs.twimg.com/media/Gr3co3dWsAAucQ8?format=jpg&name=medium" alt="Extension: Asset Animations" />
+  <figcaption>
+    <b>Figure 21:</b> Sprite-based animations (e.g., walking, eating) make your pet feel truly alive.
+  </figcaption>
+</figure>
+
+<figure>
+  <iframe 
+    width="100%" 
+    height="430" 
+    src="https://www.youtube.com/embed/1yHlIwSrILM" 
+    title="Tomodachi Pets – AI-Powered On-Chain Virtual Pet Simulator" 
+    frameBorder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowFullScreen
+  ></iframe>
+  <figcaption>
+    <b>Figure 22:</b> Watch the full experience—see your pet and accessories live in action!
+  </figcaption>
+</figure>
+
+---
+
+## 🤔 Why This Matters
+
+- **For Hackathons & Sui:**  
+  Demonstrates Sui’s composability and object model—real world use of dynamic fields.
+- **For Users:**  
+  No need to be a crypto or AI expert—just draw or type and own your creation.
+- **For Web3:**  
+  Proof you can have decentralized, user-created, persistent digital characters—not just JPEGs in a wallet.
+
+---
+
+## 📣 Try It Yourself!
+
+- [Main App Repo](https://github.com/sumionochi/tomodachi-digital-pet)
+- [Extension Repo](https://github.com/sumionochi/tomodachi-digital-pet-extension)
+- [Documentation](https://github.com/sumionochi/tomodachi-pets-documentation)
+- [Demo Video](https://www.youtube.com/watch?v=E1rkjZkNquI)
+
+Fork, star, or open an issue to contribute!  
+Want to help build the next evolution of NFT games? DM or PR welcome.
+
+---
+
+## 🚀 Final Thoughts
+
+Tomodachi Pets is what happens when you mix Tamagotchi nostalgia, true composable NFTs, AI creativity, and playful browser UX—powered by Sui.  
+We hope this inspires more devs to make Web3 fun, open, and user-driven.
+
+Happy hacking! 🐾
+

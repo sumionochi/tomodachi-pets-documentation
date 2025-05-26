@@ -10,13 +10,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "AriaDocs - Blog",
+  title: "Tomodachi Pets Game - Blog",
 };
 
 export default async function BlogIndexPage() {
-  const blogs = (await getAllBlogsFrontmatter()).sort(
-    (a, b) => stringToDate(b.date).getTime() - stringToDate(a.date).getTime()
-  );
+  const blogs = (await getAllBlogsFrontmatter()).sort((a, b) => {
+    const dateA = stringToDate(a.date) ?? new Date(0);
+    const dateB = stringToDate(b.date) ?? new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+  
   return (
     <div className="flex flex-col gap-1 sm:min-h-[91vh] min-h-[88vh] pt-2">
       <div className="mb-7 flex flex-col gap-2">

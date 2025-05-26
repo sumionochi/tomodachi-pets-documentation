@@ -11,7 +11,7 @@ export function helperSearch(
   node: EachRoute,
   prefix: string,
   currenLevel: number,
-  maxLevel?: number,
+  maxLevel?: number
 ) {
   const res: EachRoute[] = [];
   let parentHas = false;
@@ -29,7 +29,7 @@ export function helperSearch(
         item,
         nextLink,
         currenLevel + 1,
-        maxLevel,
+        maxLevel
       );
       if (!!innerRes.length && !parentHas && !node.noLink) {
         res.push({ ...node, items: undefined, href: nextLink });
@@ -48,8 +48,18 @@ export function advanceSearch(query: string) {
 }
 
 // Thursday, May 23, 2024
-export function formatDate(dateStr: string): string {
+export function formatDate(dateStr: unknown): string {
+  if (typeof dateStr !== "string") return "";
   const [day, month, year] = dateStr.split("-").map(Number);
+  if (
+    !day ||
+    !month ||
+    !year ||
+    Number.isNaN(day) ||
+    Number.isNaN(month) ||
+    Number.isNaN(year)
+  )
+    return "";
   const date = new Date(year, month - 1, day);
 
   const options: Intl.DateTimeFormatOptions = {
@@ -62,9 +72,19 @@ export function formatDate(dateStr: string): string {
   return date.toLocaleDateString("en-US", options);
 }
 
-//  May 23, 2024
-export function formatDate2(dateStr: string): string {
+// May 23, 2024
+export function formatDate2(dateStr: unknown): string {
+  if (typeof dateStr !== "string") return "";
   const [day, month, year] = dateStr.split("-").map(Number);
+  if (
+    !day ||
+    !month ||
+    !year ||
+    Number.isNaN(day) ||
+    Number.isNaN(month) ||
+    Number.isNaN(year)
+  )
+    return "";
   const date = new Date(year, month - 1, day);
 
   const options: Intl.DateTimeFormatOptions = {
@@ -75,8 +95,18 @@ export function formatDate2(dateStr: string): string {
   return date.toLocaleDateString("en-US", options);
 }
 
-export function stringToDate(date: string) {
+export function stringToDate(date: unknown): Date | null {
+  if (typeof date !== "string") return null;
   const [day, month, year] = date.split("-").map(Number);
+  if (
+    !day ||
+    !month ||
+    !year ||
+    Number.isNaN(day) ||
+    Number.isNaN(month) ||
+    Number.isNaN(year)
+  )
+    return null;
   return new Date(year, month - 1, day);
 }
 
