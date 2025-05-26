@@ -7,6 +7,7 @@ import { SheetLeftbar } from "./leftbar";
 import { page_routes } from "@/lib/routes-config";
 import { SheetClose } from "@/components/ui/sheet";
 import AlgoliaSearch from "./algolia-search";
+import Image from "next/image";
 
 export const NAVLINKS = [
   {
@@ -17,25 +18,7 @@ export const NAVLINKS = [
     title: "Blog",
     href: "/blog",
   },
-  {
-    title: "Examples",
-    href: "#",
-  },
-  {
-    title: "Guides",
-    href: "#",
-  },
-  {
-    title: "Community",
-    href: "https://github.com/nisabmohd/Aria-Docs/discussions",
-  },
 ];
-
-const algolia_props = {
-  appId: process.env.ALGOLIA_APP_ID!,
-  indexName: process.env.ALGOLIA_INDEX!,
-  apiKey: process.env.ALGOLIA_SEARCH_API_KEY!,
-};
 
 export function Navbar() {
   return (
@@ -54,11 +37,10 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center sm:justify-normal justify-between sm:gap-3 ml-1 sm:w-fit w-[90%]">
-          <AlgoliaSearch {...algolia_props} />
           <div className="flex items-center justify-between sm:gap-2">
             <div className="flex ml-4 sm:ml-0">
               <Link
-                href="https://github.com/nisabmohd/NexDocs"
+                href="https://github.com/sumionochi/tomodachi-digital-pet"
                 className={buttonVariants({
                   variant: "ghost",
                   size: "icon",
@@ -67,7 +49,7 @@ export function Navbar() {
                 <GithubIcon className="h-[1.1rem] w-[1.1rem]" />
               </Link>
               <Link
-                href="#"
+                href="https://x.com/tomodachi_pets"
                 className={buttonVariants({
                   variant: "ghost",
                   size: "icon",
@@ -87,8 +69,15 @@ export function Navbar() {
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <CommandIcon className="w-6 h-6 text-muted-foreground" strokeWidth={2} />
-      <h2 className="text-md font-bold font-code">AriaDocs</h2>
+      <Image 
+        src="/icons/icon128.png" 
+        alt="Logo" 
+        width={40} 
+        height={40} 
+        priority 
+        className="rounded-xl"
+      />
+      <h2 className="text-md font-bold font-code">Tomodachi Pets</h2>
     </Link>
   );
 }
