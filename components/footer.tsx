@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="border-t w-full h-16">
       <div className="container flex items-center justify-center mx-auto text-muted-foreground text-sm text-center h-full px-4">
-        <p>© 2025 Tomodachi Pets – A virtual pet simulator on the Sui blockchain</p>
+        <p>© 2025 Tomodachi Pets Game – A virtual pet simulator on the Sui blockchain</p>
       </div>
     </footer>
   );

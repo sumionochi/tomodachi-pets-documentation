@@ -20,11 +20,16 @@ const monoFont = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AriaDocs - Template",
-  metadataBase: new URL("https://ariadocs.vercel.app/"),
+  title: "Tomodachi Pets Game – AI On-Chain Pet Simulator Docs",
+  metadataBase: new URL("https://tomodachi-pets.vercel.app/"),
   description:
-    "This comprehensive documentation template, crafted with Next.js and available as open-source, delivers a sleek and responsive design, tailored to meet all your project documentation requirements.",
+    "Official documentation for Tomodachi Pets, an open-source, AI-powered on-chain pet simulator built on Sui. Learn how to create, mint, customize, and animate NFT pets and accessories, and explore our browser extension, Move contracts, and decentralized storage integration.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
+
 
 export default function RootLayout({
   children,

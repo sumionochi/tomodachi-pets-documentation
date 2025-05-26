@@ -1,0 +1,162 @@
+---
+title: FAQ
+description: Frequently Asked Questions about Tomodachi Pets – AI On-Chain Virtual Pet Playground.
+---
+
+# ❓ FAQ – Tomodachi Pets
+
+Here you’ll find answers to common questions about Tomodachi Pets, gameplay, technology, security, and more.
+
+---
+
+## 🎮 Game & User Experience
+
+### What is Tomodachi Pets?
+Tomodachi Pets is an AI-powered, on-chain pet simulator where you can draw or prompt custom pet companions and accessories, mint them as NFTs on Sui, and bring them to life on any website via a browser extension.
+
+---
+
+### How do I start playing?
+1. Visit the web app and connect your Sui wallet.
+2. Register to claim starting points.
+3. Create and name your unique pet.
+4. Complete daily quizzes to earn more points.
+5. Design and mint custom accessories using AI or your own uploads.
+6. Equip accessories to your pet.
+7. Install the Chrome extension to see your pet follow your cursor across the web!
+
+---
+
+### Do I need to pay to play or mint pets/accessories?
+No, the game is **free to play**. Points are earned through registration and daily engagement (quiz + check-in). Minting an accessory NFT burns in-game points (not SUI tokens), so there's no out-of-pocket cost after you claim your initial points.
+
+---
+
+### What’s unique about the pets and accessories?
+- **Each pet** has a unique on-chain name and NFT ID.
+- **Accessories** are fully custom: draw, upload, or use AI to create something new!
+- **Pets and accessories are composable NFTs:** you can equip/unequip accessories at any time.
+- **All images and metadata are stored in decentralized storage** (Walrus).
+
+---
+
+### Can I have more than one pet?
+Typically, each user can mint **one unique pet** per wallet (enforced by the Move contract for gameplay balance). Accessories and assets are unlimited.
+
+---
+
+### What’s the daily quiz?
+A daily, on-chain quiz about Sui, Walrus, Move, and crypto/web3. Completing it unlocks the check-in button, which rewards +2 points if 24 hours have passed since your last claim. It’s both a reward and a fun way to learn!
+
+---
+
+## 🖼️ NFTs, AI & Decentralized Storage
+
+### How are accessories generated with AI?
+Accessories can be created by:
+- Describing them with text (e.g., "wizard hat")
+- Sketching/drawing with the in-app canvas
+- Editing sketches using AI
+The app uses OpenAI’s GPT-Image-1 for text-to-image and image-editing, then previews results for minting.
+
+---
+
+### Where are my pet and accessory images stored?
+Images are uploaded to **Walrus** – Mysten Labs’ decentralized storage protocol. Your NFT’s on-chain metadata contains a Walrus content address (blobId URL).  
+Anyone can fetch the image using this URL, making your pet’s look fully decentralized and censorship-resistant.
+
+---
+
+### Can I upload my own images instead of using AI?
+Yes! You can upload PNG/JPG images as accessories, or use your own art instead of AI-generated images. The `/api/upload` route handles both.
+
+---
+
+### Are minted NFTs tradable?
+Yes!  
+- Accessories are minted as standalone NFTs, tradable/transferrable on Sui.
+- Pets themselves are unique NFTs; you own them and can transfer them.
+- When equipped, accessories become "child objects" of a pet but can be unequipped and returned to your wallet.
+
+---
+
+## 🛠️ Technical & Development
+
+### What makes Tomodachi Pets “on-chain”?
+- All core game logic (pets, assets, equipping, points, daily rewards, quizzes) is implemented in the **Sui Move smart contract** ([`game.move`](https://github.com/sumionochi/tomodachi-digital-pet/blob/main/move/sources/game.move)).
+- Every pet, accessory, and user’s score is tracked as an on-chain object.
+- All asset images are stored via **Walrus** and referenced on-chain.
+
+---
+
+### How does the browser extension work?
+- The extension reads your pet and asset NFTs from Sui (using your address).
+- Renders your pet and equipped accessories as overlays that follow your cursor on any website.
+- All data is fetched via a local backend (`server.js`) that queries Sui and returns the pet/asset data.
+- Supports real-time updates, animated sprite sheets, and toggling pets/assets on/off.
+
+---
+
+### What technology stack is used?
+- **Frontend:** Next.js 13 (React 19, Tailwind, Radix UI)
+- **Blockchain:** Sui + Move contracts
+- **Storage:** Walrus Protocol
+- **AI:** OpenAI GPT-Image-1 (text-to-image, image editing)
+- **Extension:** TypeScript, React, Chrome Extension APIs, Node/Express backend
+
+---
+
+### Is the code open source? Can I contribute?
+Yes, everything is open source!  
+- [Main dApp repository](https://github.com/sumionochi/tomodachi-digital-pet)
+- [Browser extension repository](https://github.com/sumionochi/tomodachi-digital-pet-extension)
+You’re welcome to contribute, suggest features, or fork for your own use!
+
+---
+
+## 🔒 Security & Fairness
+
+### Can someone cheat to claim extra rewards?
+No, the daily check-in (and quiz) logic is enforced by the Move contract using Sui’s global `Clock` object. You can only claim once per 24 hours per wallet—impossible to cheat via the UI.
+
+---
+
+### What is the AdminCap?
+A special on-chain object, **only given to the deployer**.  
+Used to test features (e.g., manually setting a user’s score for demo/judging). Regular users never have access; all real gameplay is strictly governed by smart contract rules.
+
+---
+
+### Is my pet or asset data safe if Walrus goes down?
+Walrus is designed as decentralized, redundant storage—like IPFS, but for Sui. Your NFTs’ image links are content-addressed. As long as one Walrus node is live, your images are safe.  
+**On-chain metadata is always available**, and images can be re-pinned by anyone if needed.
+
+---
+
+## 🌐 Miscellaneous
+
+### Can I use Tomodachi Pets on mobile?
+The web app is responsive, but full extension support (pet on every page) is currently only for desktop Chrome browsers. All dApp features are mobile-ready otherwise.
+
+---
+
+### Can I export or share my pets?
+Yes! Download images directly from the app, share your NFT links, or send/trade pets and accessories via Sui wallet transfer.
+
+---
+
+### How is Tomodachi Pets different from other NFT projects?
+- **Playable & interactive:** Pets follow you on the web, not just static images!
+- **AI-powered creation:** Anyone can create unique art—even non-artists.
+- **On-chain composability:** Equip, unequip, and fully own your digital companions.
+- **Learning & reward:** The quiz system teaches Web3 while you play.
+
+---
+
+### I found a bug or want a new feature!
+Open an issue or PR on our GitHub, or join the community on Discord/Twitter (links in the repo). We love feedback and contributions!
+
+---
+
+Have a question not answered here?  
+[Open an issue](https://github.com/sumionochi/tomodachi-digital-pet/issues) or ask in the community!
