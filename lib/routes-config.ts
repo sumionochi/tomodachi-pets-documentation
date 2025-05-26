@@ -19,7 +19,7 @@ export const ROUTES: EachRoute[] = [
         title: "Playthrough",
         href: "/playthrough",
       },
-      { title: "Quick Start Guide", href: "/quick-start-guide" },
+      { title: "How To Play", href: "/how-to-play" },
       {
         title: "Project Structure",
         href: "/project-structure",
