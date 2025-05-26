@@ -1,62 +1,182 @@
 ---
 title: Introduction
-description: This section provides an overview of AriaDocs.
+description: This section provides an overview of Tomodachi Pets Game.
 ---
 
-Welcome to **AriaDocs**! This template provides a modern, flexible, and user-friendly foundation for creating engaging documentation. Whether you're building a knowledge base, project docs, or a personal blog, AriaDocs makes it easy to set up and scale.
+## Welcome to Tomodachi Pets
 
+The Game is an AI-powered on-chain pet simulator.
+Draw or prompt pets, accessories → mint as NFTs on Sui.
+Equip/unequip assets using dynamic fields.
+Earn points via check-in, quizzes.
+AI-generated sprites for walking/eating.
+Browser extension shows animated pet following cursor.
+All data decentralized: **Walrus storage**, **Move logic**, **Sui objects** with AI powered **GPT-Image-1**.
 
-##  Open Source Philosophy
+![system design](https://pbs.twimg.com/media/Gr4OyloXgAAeKtr?format=jpg&name=medium)
+![system design](https://i.postimg.cc/1t0FDD1L/Static-to-dynamic-1.gif)
 
-AriaDocs is proudly **open-source**! 🎉 We believe in creating an accessible, collaborative platform that thrives on community contributions.
-
-<Note title="Contribute"> 
- Interested in helping us improve? Check out our [GitHub repository](https://github.com/your-repo) to get started! From feature suggestions to bug fixes, all contributions are welcome.
+<Note>
+  **Built for SuiOverflow 2025 (Entertainment & Culture track):** Tomodachi Pets
+  showcases Sui’s on-chain composability in a playful way. The project
+  demonstrates how **user-generated content** (your pet drawings or prompts) can
+  be turned into **animated NFTs**, and how on-chain game assets can live beyond
+  a single dApp.
 </Note>
 
-## Project Overview
+---
 
-**AriaDocs** is more than just a documentation template. It's a **complete toolkit** designed for modern web development. Key features include:
+## Philosophy
 
-- **Markdown & MDX Support:** Easily write documentation in Markdown, with the option to include interactive components via MDX.
-- **Customizable Themes:** Designed with a minimalist ShadCN-inspired theme that’s easy to style.
-- **SEO-Optimized:** Each page is SEO-ready, ensuring search engines can find and rank your content.
-- **Interactive Code Blocks:** Beautifully styled, language-specific code blocks for an enhanced reading experience.
+- **On-Chain Composability:**  
+  Every pet and accessory is a Sui on-chain object. Move contract uses dynamic fields to attach asset NFTs onto a Pet NFT, enabling equipping/unequipping with true ownership (`game.move:L260-L268`).
 
-### Key Features
+- **User Creativity & AI:**  
+  Users generate custom pet art via AI—Next.js API integrates OpenAI image generation to turn text/sketches into images, minted as assets (`api/generate/route.ts:L15-L22`).
 
-| **Feature**                   | **Description**                                          |
-|-------------------------------|----------------------------------------------------------|
-| MDX Support                   | Write interactive documentation with MDX.                |
-| Nested Pages                  | Organize content in a nested, hierarchical structure.    |
-| Blog Section                  | Include a dedicated blog section.                        |
-| Pagination                    | Split content across multiple pages.                     |
-| Syntax Highlighting           | Highlight code for better readability.                   |
-| Code Line Highlighting & Titles | Highlight specific lines with descriptive titles.      |
-| Interactive Code Blocks       | Language-specific and interactive code display.          |
-| Custom Markdown Components    | Embed custom, reusable components in your docs.          |
-| Static Site Generation        | Generate a static, high-performance site.                |
-| SEO-Optimized                 | Structured for optimal search engine indexing.           |
+- **Daily Engagement & Learning:**  
+  Daily Sui, Move, Walrus related Quiz required to claim rewards +2 points. On-chain logic enforces 24-hour check-in intervals; points awarded after quiz (`game.move:L137-L145`, `game.move:L145-L150`).
 
+- **Seamless Web3 Presence:**  
+  Chrome extension brings your pet to any website, following your cursor—extension background fetches live pet data, content script injects visuals (`background.ts:L34-L42`, `content.ts:L256-L264`).
+
+<Note title="Open Source">
+  Code, art workflow, and browser extension are fully open source. [GitHub
+  Repo](https://github.com/sumionochi/tomodachi-digital-pet)
+</Note>
+
+---
+
+## Why Tomodachi Pets Should Win (Based On SUI Overflow Hackathon 2025 Rubric)
+
+### 🧠 1. Idea / Concept
+
+- **Originality:**  
+  On-chain, AI-powered, composable pet NFTs with real browser presence—not just another DeFi or static NFT app.  
+  _Example:_ Equipping a Mario hat to your NFT cat updates both pets and assets directly on-chain, and the pet appears instantly on any website via extension.
+
+  > `game.move:L260-L268`, `content.ts:L256-L264`
+
+- **Meaningful Use Case:**  
+  Makes NFTs interactive, personal, and playful—teaches Web3 via quizzes, not just speculation.  
+  _Example:_ User answers a Sui, Walrus, Move contract trivia quiz, then only after completion can click “Claim Daily Reward” to earn +2 on-chain points used for Asset minting for pets at -10 points.
+
+  > `game.move:L137-L145`, `page.tsx:L1347-L1355`
+
+- **Track Relevance:**  
+  Blends gaming, collectibles, user creation, and cultural engagement; perfect for Entertainment & Culture.  
+  _Example:_ Users draw or describe unique pets and accessories; AI generates custom art, and each becomes a tradable NFT.
+  > `api/generate/route.ts:L15-L22`
+
+---
+
+### 🛠 2. Product
+
+- **Usability & Completeness:**  
+  Fully working dApp, browser extension, and backend. All features demo-ready.  
+  _Example:_ User creates a pet, equips accessories, sees pet and items live both in app and on any website in real time.
+
+  > `page.tsx:L479-L487`, `server.js:L91-L100`
+
+- **Demo/Prototype:**  
+  Users create, mint, equip, animate, and display pets—every function works live.  
+  _Example:_ Minting a new accessory updates React state and displays the equipped item on the extension overlay.
+
+  > `gameHooks.ts:L279-L287`
+
+- **Intuitive UX/UI:**  
+  Aesthetically pleasing Ghibli theme with One-click flows, instant feedback, clear visuals. Pets show up on any site, not buried in wallet.  
+  _Example:_ Extension overlay instantly updates when user switches equipped items; users toggle visibility with a simple hotkey.
+  > `content.ts:L228-L236`, `background.ts:L34-L42`
+
+---
+
+### 💻 3. Technical Implementation
+
+- **Technical Depth & Complexity:**  
+  Advanced Move contract: dynamic fields, global state, trustless cooldowns, event emission.  
+  _Example:_ Pet and asset attachment is handled with Sui’s dynamic object fields—Move checks prevent double-equipping and duplicate names on-chain.
+
+  > `game.move:L211-L218`, `game.move:L145-L150`
+
+- **Sui-Native Features:**  
+  Uses Sui's unique dynamic fields, global clock, composable objects, and Move-centric logic.  
+  _Example:_ Daily check-in uses Sui’s global Clock object to enforce 24h cooldown; no possible client cheat.
+
+  > `game.move:L260-L268`, `game.move:L137-L145`
+
+- **Thoughtful Architecture:**  
+  Modular stack—Move, Next.js, AI backend, Chrome extension, and live Web3 hooks all interconnected.  
+  _Example:_ When an asset is equipped, the dApp triggers a Move transaction, React state updates, and the extension fetches new data from the backend, syncing UI everywhere.
+  > `sui.ts:L123-L132`, `server.js:L98-L106`
+
+---
+
+### 😲 4. "Wow" Factor
+
+- **Lasting Impression:**  
+  NFT pets visibly follow you across the whole web, not just a dApp.  
+  _Example:_ User visits any website—pet floats beside their cursor, orbiting animated accessories in real time.
+
+  > `content.ts:L256-L264`
+
+- **Clever/Impactful:**  
+  Turns NFTs from static images into living, composable companions.  
+  _Example:_ Equipping a new accessory triggers live animation frames, making pets “walk” or “eat” across any website.
+
+  > `game.move:L260-L268`, `content.ts:L228-L236`
+
+- **Excitement to Go Live:**  
+  Mainstream-ready, playful, replayable, and instantly engaging for all users—Web3 as it should be.  
+  _Example:_ All layers productionized—pet creation, AI art, instant display, robust error handling, and ready for public use.
+  > `page.tsx:L452-L461`, `gameHooks.ts:L263-L270`
+
+<Note type="success">
+  Each rubric point is mapped to a real implemented feature, with file and line for technical proof. See for details and proof of implementation:
+
+[Move contract](https://github.com/sumionochi/tomodachi-digital-pet/blob/main/move/sources/game.move) – Smart contract: NFT minting, dynamic fields, scoreboard, quiz/check-in logic.
+
+[page.tsx](https://github.com/sumionochi/tomodachi-digital-pet/blob/main/src/app/page.tsx) – Main dApp UI: flows for creating, equipping, quiz, check-in, asset display.
+
+[sui.ts](https://github.com/sumionochi/tomodachi-digital-pet/blob/main/src/lib/sui.ts) – Sui blockchain tx builder: handles all on-chain actions from the dApp.
+
+[gameHooks.ts](https://github.com/sumionochi/tomodachi-digital-pet/blob/main/src/hooks/gameHooks.ts) – React hooks: fetches and syncs real-time pets, assets, scores from Sui.
+
+[background.ts](https://github.com/sumionochi/tomodachi-digital-pet-extension/blob/main/src/background/background.ts) – Extension: manages user, fetches pet/asset data for overlay display.
+
+[content.ts](https://github.com/sumionochi/tomodachi-digital-pet-extension/blob/main/src/content/content.ts) – Extension: renders pet+assets, animates orbit, follows cursor on web pages.
+
+[server.js](https://github.com/sumionochi/tomodachi-digital-pet-extension/blob/main/backend/server.js) – Extension backend: Express API to fetch on-chain pet/asset info for extension.
+
+</Note>
+
+---
+
+## Key Features
+
+| **Feature**                            | **Description**                                                               |
+| -------------------------------------- | ----------------------------------------------------------------------------- |
+| 🤖 AI-Powered NFT Minting              | Generate pet and accessory images using AI from prompts or sketches.          |
+| 🧩 Composable NFTs (Dynamic Fields)    | Equip/unequip accessory NFTs to pets via on-chain Move logic.                 |
+| 🔗 On-Chain Game Logic                 | Pet creation, scoring, and attachment fully governed by smart contracts.      |
+| 📅 Scoreboard & Daily Quests           | Earn points through daily check-ins and quizzes enforced by Sui’s clock.      |
+| 🎩 Accessory Minting with Points       | Burn 10 points to mint accessories; stored and priced on-chain.               |
+| 🎞️ Sprite Sheet Animation Support      | Use 4-frame images to animate pets or accessories (e.g., walking, eating).    |
+| 🧭 Chrome Extension Integration        | Animated pet with orbiting accessories follows cursor on any website.         |
+| 🎛️ Cursor-Following & Accessory Toggle | Toggle pet visibility, switch accessory modes (static/animated) in real time. |
+| 🐋 Walrus Storage Integration          | All images uploaded to decentralized storage; URLs stored in NFT metadata.    |
+| 🛠️ Modular Web3 Architecture           | Uses Sui + Move + Walrus + AI + Next.js + local backend + extension pipeline. |
 
 ## Technology & Libraries
 
-AriaDocs leverages cutting-edge technologies to ensure performance and flexibility:
+Tomodachi Pets is built using a modular stack combining AI, on-chain logic, and interactive web layers:
 
-- **Next.js 14** - The powerful React framework optimized for production.
-- **React Router** - Declarative routing for dynamic web applications.
-- **TanStack Router** - Type-safe, flexible routing for modern apps.
-- **Tailwind CSS** - Utility-first styling for quick, clean designs.
-- **Shadcn-UI** - Elegant, accessible components for a polished look.
-- **next-mdx-remote** - Enables MDX support for dynamic, interactive Markdown content.
-
-
-## Deploy on Vercel
-
-Deploy your project using the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) for fast, secure, and reliable hosting.
-
-| Deploy Options             | Link                                                                                     |
-|-----------------------------|------------------------------------------------------------------------------------------|
-| Next.js Deployment          | [Deploy with Vercel](https://vercel.com/new/clone?repository-url=https://github.com/nisabmohd/Aria-Docs) |
-| React Router Deployment     | [Deploy with Vercel](https://vercel.com/new/clone?repository-url=https://github.com/nisabmohd/Aria-Docs) |
-| TanStack Router Deployment  | [Deploy with Vercel](https://vercel.com/new/clone?repository-url=https://github.com/nisabmohd/Aria-Docs) |
+- **Sui Blockchain (Move)** – NFT minting, dynamic object fields, score tracking, composable pets.
+- **Walrus Storage** – Decentralized image storage for pets and accessories (blobId → stored on-chain).
+- **Next.js 14** – Frontend framework powering the web app (dApp) and browser extension UI.
+- **Tailwind CSS** – Utility-first styling for responsive and fast-loading design.
+- **Shadcn-UI** – Accessible, minimalist component library used across dashboard and extension popup.
+- **@mysten/dapp-kit** – Wallet integration and transaction signing with Sui wallets.
+- **OpenAI API** – AI image generation from text/sketch inputs (sketch-to-image + sprite generation).
+- **Node.js + Express** – Local backend for the extension, fetches pet and asset data from Sui.
+- **Chrome Extension (Manifest V3)** – Content + background scripts for pet overlay on any site.
