@@ -1,200 +1,171 @@
 ---
-title: Project Structure
-description: This section provides an overview of Project Structure.
+title: Project Structure & System Overview
+description: Explore the repositories, core architecture, and feature highlights of Tomodachi Pets.
 ---
 
-## Project Structure Overview
+# 🗂️ Project Structure & System Overview
 
-### app
+Tomodachi Pets is composed of two tightly integrated repositories:  
+the main web application (dApp) and a browser extension for a cross-web pet experience.
 
-This folder contains the main application code for Next.js, managing layouts, routing, and specific content pages. It is organized to support both the `docs` and `blog` sections, with dedicated pages and layouts for each section.
+---
 
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "app",
-      isOpen: true,
-      children: [
-        { type: "file", name: "page.tsx" },
-        { type: "file", name: "layout.tsx" },
-        {
-          type: "folder",
-          name: "blog",
-          children: [
-            { type: "file", name: "page.tsx" },
-            {
-              type: "folder",
-              name: "[slug]",
-              children: [{ type: "file", name: "page.tsx" }],
-            },
-          ],
-        },
-        {
-          type: "folder",
-          name: "docs",
-          children: [
-            { type: "file", name: "layout.tsx" },
-            { type: "file", name: "[[...slug]].tsx" },
-          ],
-        },
-      ],
-    },
-  ]}
-/>
+## Main Repository: `tomodachi-digital-pet`
 
-### components
+<pre>
+<code>
+tomodachi-digital-pet/
+├── move/                         # Sui Move smart contracts
+│   ├── sources/
+│   │   └── game.move             # Core Move module defining Pet, Asset, ScoreBoard, etc.
+│   └── tests/
+│       └── move_tests.move       # Test scenarios for the Move contract
+├── src/
+│   ├── app/
+│   │   ├── page.tsx              # Next.js main page (React UI for game interface)
+│   │   └── api/                  # Next.js API routes for backend logic
+│   │       ├── upload/route.ts           # Handles image uploads to Walrus
+│   │       ├── generate/route.ts         # Text-to-image generation via OpenAI API
+│   │       ├── generatePetPreview/route.ts # Multi-image generation preview (AI)
+│   │       └── editPetPreview/route.ts    # Image editing endpoint for sketch-to-image via OpenAI
+│   ├── components/
+│   │   ├── DailyQuiz.tsx         # Daily Quiz UI component (Q&A about Sui)
+│   │   ├── AttributeInputList.tsx # Form component for adding NFT attributes
+│   │   └── ui/                   # Reusable UI components (buttons, cards, dialogs, etc.)
+│   ├── hooks/
+│   │   └── gameHooks.ts          # Custom React hooks for querying game data (pets, assets, scores)
+│   ├── lib/
+│   │   ├── sui.ts                # Sui helper library (builds transactions for mint, equip, etc.)
+│   │   ├── utils.ts              # Utility functions (e.g., formatting)
+│   │   └── ...other helpers (localStorage, etc.)
+│   └── (styles, config files, etc.)
+├── public/                      # Public assets (icons, etc.)
+├── package.json                 # Project dependencies (Next.js, Sui SDK, OpenAI, Walrus, etc.)
+└── next.config.js, tailwind.config.js, tsconfig.json, etc.
+</code>
+</pre>
 
-This folder contains all reusable components used throughout the project. It’s structured to categorize components, making it easy to locate and manage UI elements, Markdown customizations, and navigation.
+**Tech stack highlights:**
+- Built with **Next.js 13 (React + TypeScript)**
+- Uses Sui SDKs (`@mysten/sui`, `wallet-kit`) for blockchain, **@mysten/walrus** for decentralized storage
+- AI image generation via **OpenAI SDK**
+- UI/UX with **Radix UI**, **Tailwind CSS**
 
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "components",
-      isOpen: true,
-      children: [
-        {
-          type: "folder",
-          name: "ui",
-          isOpen: true,
-          children: [],
-        },
-        {
-          type: "folder",
-          name: "markdown",
-          isOpen: true,
-          children: [
-            { type: "file", name: "note.tsx" },
-            { type: "file", name: "image.tsx" },
-            { type: "file", name: "table.tsx" },
-          ],
-        },
-        { type: "file", name: "navbar.tsx" },
-      ],
-    },
-  ]}
-/>
+---
 
+## Extension Repository: `tomodachi-digital-pet-extension`
 
-### styles
+<pre>
+<code>
+tomodachi-digital-pet-extension/
+├── src/
+│   ├── popup/
+│   │   ├── Popup.tsx            # React popup UI for user to enter Sui address, select pet, configure assets
+│   │   └── popup.html, popup.css# HTML/CSS for the extension popup
+│   ├── background/
+│   │   └── background.ts        # Background script: handles messages, fetches pet data via local API
+│   ├── content/
+│   │   ├── content.ts           # Content script: injects pet overlay in pages, animates assets
+│   │   └── content.css          # Styles for pet overlay (cursor-following image)
+│   └── common/types.ts          # Shared type definitions (Pet, Asset metadata, message formats)
+├── backend/
+│   └── server.js                # Express server to query Sui RPC for pet/assets
+├── icons/                       # Icons for the extension (16x16, 48x48, 128x128)
+├── manifest.json                # Chrome extension manifest (permissions, content script registration)
+├── webpack.config.js            # Build configuration for the extension (bundles content, popup, background)
+└── package.json                 # Extension’s dependencies (uses Sui JS client, React)
+</code>
+</pre>
 
-This folder contains global and component-specific CSS files, allowing for project-wide styling consistency and customizations.
+**Key components:**  
+- Popup UI for Sui address, pet selection  
+- Background script for RPC data fetch  
+- Content script for live pet rendering  
+- Local Node/Express backend for blockchain queries (avoids direct RPC from content script)
 
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "styles",
-      isOpen: true,
-      children: [
-        { type: "file", name: "globals.css" },
-        { type: "file", name: "syntax.css" },
-        { type: "file", name: "overrides.css" },
-      ],
-    },
-  ]}
-/>
+---
 
+## 🏗️ System Architecture
 
-### contents
+The system is composed of several interacting components:  
+the user-facing web app, Sui smart contracts, Walrus storage, OpenAI AI services, and the Chrome browser extension.
 
-This folder stores all Markdown content for the documentation and blog sections, with clear organization by content type. Each Markdown file represents a single piece of content, with frontmatter used for metadata.
+<figure>
+  <img src="https://github.com/user-attachments/assets/663b441d-7fa3-4c8e-bc8e-a48571e09ec6" alt="System architecture of Tomodachi Pets" />
+  <figcaption>
+    <b>Figure:</b> System architecture—web app, on-chain logic, AI generation, decentralized storage, and browser extension, all working together.
+  </figcaption>
+</figure>
 
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "contents",
-      isOpen: true,
-      children: [
-        {
-          type: "folder",
-          name: "docs",
-          isOpen: true,
-          children: [
-            { type: "file", name: "getting-started.md" },
-            { type: "file", name: "api-reference.md" },
-            {
-              type: "folder",
-              name: "tutorials",
-              isOpen: true,
-              children: [{ type: "file", name: "tutorial-1.md" }],
-            },
-          ],
-        },
-        {
-          type: "folder",
-          name: "blogs",
-          isOpen: true,
-          children: [
-            { type: "file", name: "intro-to-project.md" },
-            { type: "file", name: "dev-updates.md" },
-          ],
-        },
-      ],
-    },
-  ]}
-/>
+---
 
+## 🤖 AI Service Integration (GPT-Image-1 for Accessories)
 
-### public
+Tomodachi Pets features **AI-generated art** for pet accessories, making every asset unique and user-driven.
 
-This folder holds all static assets, such as images, videos, fonts, and icons. These files are directly accessible via URL, so it’s important to avoid sensitive or private content here.
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "public",
-      isOpen: true,
-      children: [
-        {
-          type: "folder",
-          name: "images",
-          isOpen: true,
-          children: [
-            { type: "file", name: "logo.png" },
-            { type: "file", name: "banner.jpg" },
-          ],
-        },
-        {
-          type: "folder",
-          name: "icons",
-          children: [],
-        },
-        {
-          type: "folder",
-          name: "videos",
-          children: [],
-        },
-      ],
-    },
-  ]}
-/>
+- **Text-to-Image:**  
+  Users describe an accessory (e.g., “red cowboy hat with gold trim”), then `/api/generate` uses OpenAI’s GPT-Image-1 to create a 1024×1024 transparent PNG.
+- **Sketch-to-Image Editing:**  
+  Users can sketch accessory outlines in-app, submit with a text prompt to `/api/editPetPreview`, and AI turns it into polished art—perfect for non-artists.
+- **Multi-Image Previews:**  
+  `/api/generatePetPreview` fetches several AI variants so users can pick the best.
+- **Manual Upload Supported:**  
+  Users can always upload their own images—handled by `/api/upload`.
+- **Decentralized Storage:**  
+  All finalized images are sent to Walrus and referenced in the on-chain NFT.
 
+<figure>
+  <img src="https://i.postimg.cc/9Q2LzDLS/image.png" alt="AI-generated accessory image in Tomodachi Pets" />
+  <figcaption>
+    <b>Figure:</b> AI-generated accessory image, created from user prompt and refined for minting as an NFT asset.
+  </figcaption>
+</figure>
 
-### lib
+---
 
-This folder contains helper functions and utilities used across the application, such as Markdown parsing and routing logic. These utilities help keep the codebase clean and organized by separating out common functionality.
+## 🌐 Browser Extension: Pet Companion Everywhere
 
-<Files
-  items={[
-    {
-      type: "folder",
-      name: "lib",
-      isOpen: true,
-      children: [
-        { type: "file", name: "markdown.ts" },
-        { type: "file", name: "routes-config.ts" },
-        { type: "file", name: "utils.tsx" },
-      ],
-    },
-  ]}
-/>
+Tomodachi Pets' Chrome extension brings your NFT pet (and its accessories) to any website, making Web3 feel alive and fun.
 
-### Additional
+- **Popup UI:** Enter Sui address, pick pet/assets
+- **Background script:** Fetches on-chain pet and asset data via local API
+- **Content script:** Renders pet overlay, animates assets, follows your cursor on every page
+- **User control:** Toggle pet/asset visibility, hotkeys, and more
 
-- **`package.json`**: Contains metadata about the project, dependencies, and scripts for building and running the application.
-- **`tailwind.config.ts`**: Configures Tailwind CSS, allowing customization of theme colors, fonts, and responsive breakpoints specific to this project.
+<figure>
+  <img src="https://github.com/user-attachments/assets/98585c25-f3b6-4f66-9c7b-2efe03378c6b" alt="Browser extension architecture and data flow" />
+  <figcaption>
+    <b>Figure:</b> Extension message flow: popup configures pet, background fetches data, content script displays and animates the companion on any website.
+  </figcaption>
+</figure>
 
-This structure organizes your project in a way that supports scalability and maintainability, making it easier to navigate and work on different sections of the application.
+---
+
+## 🧑‍💻 User Flows & Journeys
+
+Tomodachi Pets is built for an intuitive, rewarding player experience.  
+Typical user journeys:
+
+- **🐣 Creating Your Pet:**  
+  New user connects Sui wallet, enters unique name, and calls `create_pet`. If available, the pet NFT is minted and appears in dashboard & wallet.
+- **🎨 Designing & Minting Accessories:**  
+  User draws or describes accessory, uses AI generation, uploads to Walrus, then mints as on-chain asset NFT (burns points).
+- **👒 Equipping Accessories:**  
+  User equips asset to pet (`equip_asset`). Pet updates visually both in app and extension overlay. Assets become child NFTs of pet on-chain.
+- **📅 Daily Quiz & Check-In:**  
+  User completes daily quiz, then claims check-in (+2 points, one per 24h via on-chain Clock logic).
+- **🌐 Browsing with Extension:**  
+  Pet with all equipped accessories follows user's cursor everywhere online. Users can hide/show pet or switch assets with a hotkey.
+
+<figure>
+  <img src="https://i.postimg.cc/L6KT0qFX/image.png" alt="User journey creating and equipping a pet" />
+  <figcaption>
+    <b>Figure:</b> Creating a pet, generating accessories, equipping them, and watching your companion come alive across the web.
+  </figcaption>
+</figure>
+
+---
+
+> **All features are enforced by smart contracts, stored on Sui and Walrus, and enhanced by OpenAI—offering true user ownership and creativity in a delightful, fully on-chain game.**
+
+---
